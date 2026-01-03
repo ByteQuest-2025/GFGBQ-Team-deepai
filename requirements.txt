@@ -1,5 +1,8 @@
 streamlit
 mistralai
+groq
 pandas
 python-dotenv
 matplotlib
+pillow
+requests
