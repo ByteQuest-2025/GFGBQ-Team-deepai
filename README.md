@@ -28,4 +28,76 @@ CivicFix AI is a smart governance platform that uses Generative AI to automatica
 
 ## Tech Stack
 - **Frontend/Backend:** Python (Streamlit)
-- **AI Engine:** Google Gemini API
+- **AI Engine:** Mistral AI API (mistral-medium-latest)
+- **Data Analysis:** Pandas, Matplotlib
+- **Environment:** python-dotenv
+
+## Setup Instructions
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd GFGBQ-Team-deepai
+   ```
+
+2. **Create a virtual environment** (if not already created)
+   ```bash
+   python -m venv venv
+   ```
+
+3. **Activate virtual environment**
+   - Windows: `venv\Scripts\activate`
+   - Linux/Mac: `source venv/bin/activate`
+
+4. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Set up API Key**
+   - Get your Mistral AI API key from: https://console.mistral.ai
+   - Sign up/login and navigate to API keys section
+   - Create a new API key
+   - Create a `.env` file in the root directory
+   - Add: `MISTRAL_API_KEY=your_api_key_here`
+
+6. **Run the application**
+   ```bash
+   streamlit run app.py
+   ```
+
+## Features Implemented
+
+✅ **AI-Powered Classification**: Uses Mistral AI to intelligently categorize complaints into 8+ categories
+✅ **Smart Prioritization**: AI assigns priority scores (1-10) based on urgency, safety, and impact
+✅ **Image Support**: Upload photos with description for complaint documentation
+✅ **Auto-Routing**: Automatically routes complaints to appropriate government departments
+✅ **Admin Dashboard**: Real-time analytics with charts showing complaint distribution, priority levels, and department-wise breakdown
+✅ **Multi-Modal Input**: Supports text, image, and voice complaint submissions
+✅ **Complaint Tracking**: Stores and tracks all complaints with unique IDs
+
+## How It Works
+
+1. **Submit Grievance**: Citizens can submit complaints via text, photo, or voice
+2. **AI Analysis**: Mistral AI analyzes the complaint to:
+   - Categorize the issue (Infrastructure, Sanitation, Safety, etc.)
+   - Assign priority score (1-10) and level (High/Medium/Low)
+   - Route to appropriate department
+   - Generate summary and urgency reasons
+3. **Admin Dashboard**: Government officials can view:
+   - Total complaints and high-priority cases
+   - Category-wise distribution (pie chart)
+   - Priority level distribution (bar chart)
+   - Department-wise breakdown
+   - Recent complaints table with export functionality
+
+## Categories Supported
+
+- Civic Infrastructure
+- Sanitation
+- Public Safety
+- Healthcare
+- Education
+- Utilities (Electricity, Water)
+- Administrative Delays
+- Other
