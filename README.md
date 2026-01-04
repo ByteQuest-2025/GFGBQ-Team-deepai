@@ -11,10 +11,10 @@ Deep AI
 (To be added)
 
 # Demo Video Link
-(To be added)
+https://drive.google.com/file/d/1yq18K0etuZcgB6P6aepg-Lx0zPywrs4L/view?usp=sharing
 
 # PPT Link
-(To be added)
+https://1drv.ms/p/c/242A04F9105323F0/IQA1o9HTKexYTo2PhOf-X-xoAfO4esJGziax2CZSWzHtQz8?e=OtJXZq
 
 ---
 
@@ -28,7 +28,7 @@ CivicFix AI is a smart governance platform that uses Generative AI to automatica
 
 ## Tech Stack
 - **Frontend/Backend:** Python (Streamlit)
-- **AI Engine:** Mistral AI API (mistral-medium-latest)
+- **AI Engine:** Mistral AI API (mistral-medium-latest), Groq AI
 - **Data Analysis:** Pandas, Matplotlib
 - **Environment:** python-dotenv
 
@@ -58,6 +58,10 @@ CivicFix AI is a smart governance platform that uses Generative AI to automatica
    - Create a `.env` file in the root directory
    - Add: `MISTRAL_API_KEY=your_api_key_here`
 
+   -Get your Groq AI API key from - https://console.groq.com/keys
+   -Create a new API key
+   -In .env file, add 'GROQ_API_KEY=your_api_key_here'
+
 6. **Run the application**
    ```
    streamlit run app.py
@@ -71,6 +75,7 @@ CivicFix AI is a smart governance platform that uses Generative AI to automatica
  **Auto-Routing**: Automatically routes complaints to appropriate government departments
  **Admin Dashboard**: Real-time analytics with charts showing complaint distribution, priority levels, and department-wise breakdown
  **Multi-Modal Input**: Supports text, image, and voice complaint submissions
+ **Multi language Input**: Supports all languages
  **Complaint Tracking**: Stores and tracks all complaints with unique IDs
 
 ## How It Works
