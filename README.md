@@ -110,7 +110,6 @@ Features: Ultra-fast audio transcription (5-10 seconds)
 ```bash
 MISTRAL_API_KEY=your_mistral_api_key_here
 GROQ_API_KEY=your_groq_api_key_here
-HUGGINGFACE_API_KEY=your_huggingface_api_key_here
 ```
 
 7.**Run the application**
