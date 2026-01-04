@@ -158,6 +158,20 @@ Opens at [http://localhost:8501](http://localhost:8501)
 
 ---
 
+## Sample Images
+
+### Submit Grieveance
+
+<img width="1882" height="770" alt="image" src="https://github.com/user-attachments/assets/5af93544-92a0-485c-919e-3196160e5163" />
+
+---
+
+### Admin Dashboard
+
+<img width="1887" height="796" alt="image" src="https://github.com/user-attachments/assets/99f075ae-246b-4a02-847c-417948a0b670" />
+
+---
+
 ## ⚠️ Disclaimer
 
 This system is designed to assist grievance understanding and improve processing efficiency.
@@ -165,4 +179,4 @@ It does not replace human decision-making or take administrative actions indepen
 
 ---
 
-THANK YOU
+🙏 THANK YOU 🙏
