@@ -711,9 +711,20 @@ def load_demo_data():
 # ----------------------------
 # HERO SECTION
 # ----------------------------
-st.markdown("# 🏛️ CivicFix AI - Intelligent Grievance Redressal")
-st.markdown("### 📢 Smart, Transparent & Fast Citizen Complaint Resolution")
-st.caption("AI-powered platform that automatically categorizes, prioritizes, and routes citizen grievances to the right authorities.")
+st.markdown("""
+    <div style='text-align: center; padding: 2rem 0;'>
+        <h1 style='font-size: 2.5rem; font-weight: 700; color: #FFFFFF; margin-bottom: 0.5rem;'>
+            🏛️ CivicFix AI - Intelligent Grievance Redressal
+        </h1>
+        <p style='font-size: 1.3rem; font-weight: 500; color: #FFFFFF; margin-bottom: 0.5rem;'>
+            Smart, Transparent & Fast Citizen Complaint Resolution
+        </p>
+        <p style='font-size: 1rem; color: #FFFFFF; max-width: 800px; margin: 0 auto;'>
+            AI-powered platform that automatically categorizes, prioritizes, and routes citizen grievances to the right authorities
+        </p>
+    </div>
+""", unsafe_allow_html=True)
+
 st.divider()
 
 # ----------------------------
@@ -723,22 +734,22 @@ col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     with st.container(border=True):
-        st.markdown("### 🧠 AI Analysis")
+        st.markdown("<div style='text-align: center;'><h3>🧠 AI Analysis</h3></div>", unsafe_allow_html=True)
         st.write("NLP-powered understanding of complaints")
 
 with col2:
     with st.container(border=True):
-        st.markdown("### ⚡ Smart Priority")
+        st.markdown("<div style='text-align: center;'><h3>⚡ Smart Priority</h3></div>", unsafe_allow_html=True)
         st.write("Urgent cases identified & escalated")
 
 with col3:
     with st.container(border=True):
-        st.markdown("### 🎯 Auto Routing")
+        st.markdown("<div style='text-align: center;'><h3>🎯 Auto Routing</h3></div>", unsafe_allow_html=True)
         st.write("Instant department assignment")
 
 with col4:
     with st.container(border=True):
-        st.markdown("### 🌍 Multi-lingual")
+        st.markdown("<div style='text-align: center;'><h3>🌍 Multi-lingual</h3></div>", unsafe_allow_html=True)
         st.write("Supports mixed languages")
 
 st.divider()
@@ -779,36 +790,33 @@ with st.sidebar:
     
     st.divider()
     
-    # Debug mode toggle
-    st.markdown("### 🔧 Developer Options")
-    debug_mode = st.checkbox("Enable Debug Mode", value=False, help="Show detailed API responses and errors")
+    # API Status
+    st.markdown("### 🔌 API Status")
+    if mistral_client:
+        st.success("✅ Mistral AI")
+    else:
+        st.error("❌ Mistral AI")
     
-    if debug_mode:
-        st.caption("🐛 Debug mode active")
-        if mistral_client:
-            st.success("✅ Mistral AI connected")
-        else:
-            st.error("❌ Mistral AI not connected")
-        
-        if groq_api_available:
-            st.success("✅ Groq API connected")
-        else:
-            st.error("❌ Groq API not connected")
-        
-        if hf_api_available:
-            st.success("✅ HuggingFace connected")
-        else:
-            st.error("❌ HuggingFace not connected")
+    if groq_api_available:
+        st.success("✅ Groq Whisper")
+    else:
+        st.error("❌ Groq Whisper")
+    
+    if hf_api_available:
+        st.success("✅ HuggingFace")
+    else:
+        st.info("⚪ HuggingFace")
 
 # ----------------------------
 # PAGE: Submit Grievance
 # ----------------------------
 if page == "🏠 Submit Grievance":
     st.markdown("## 📝 Submit a Grievance")
-
+    
     with st.container(border=True):
-        st.markdown("#### Choose how you want to submit your complaint")
+        st.markdown("#### 📋 Choose how you want to submit your complaint")
 
+        # Create tabs with better styling
         tab1, tab2, tab3 = st.tabs(
             ["✍️ Text Complaint", "📷 Photo Evidence", "🎤 Voice Complaint"]
         )
@@ -821,125 +829,227 @@ if page == "🏠 Submit Grievance":
 
         # ---- TEXT ----
         with tab1:
+            st.markdown("##### ✍️ Describe your complaint in text")
             grievance_text = st.text_area(
-                "Describe the issue",
-                height=160,
-                placeholder="Example: Garbage has not been collected for 3 days in my area causing health issues..."
+                "Write your complaint here:",
+                height=180,
+                placeholder="Example: Garbage has not been collected for 3 days in my area causing severe health issues...",
+                key="text_input_main",
+                help="Describe the issue in detail. You can write in English, Hindi, or any regional language."
             )
             original_text = grievance_text
+            
+            if grievance_text:
+                st.success(f"✅ Text input received ({len(grievance_text)} characters)")
 
         # ---- PHOTO ----
         with tab2:
-            image_file = st.file_uploader(
-                "Upload a photo (JPG / PNG)",
-                type=["jpg", "jpeg", "png"]
-            )
+            st.markdown("##### 📷 Upload photo evidence of the issue")
+            
+            col1, col2 = st.columns([1, 1])
+            
+            with col1:
+                image_file = st.file_uploader(
+                    "Choose an image file:",
+                    type=["jpg", "jpeg", "png"],
+                    key="image_uploader_main",
+                    help="Upload a clear photo showing the civic issue"
+                )
+            
+            with col2:
+                if image_file:
+                    st.success("✅ Image uploaded successfully!")
+                    file_size = image_file.size / 1024
+                    st.caption(f"📎 {image_file.name} ({file_size:.1f} KB)")
+            
             if image_file:
+                # Display image with better styling
                 img = Image.open(image_file)
-                st.image(img, caption="Uploaded Photo Evidence", use_column_width=True)
+                st.image(img, caption="📸 Your Photo Evidence", use_column_width=True)
                 
-                if mistral_client:
-                    st.success("✅ AI image analysis enabled! Mistral Pixtral Vision will analyze your image.")
-                    st.info("💡 The system will automatically identify civic issues (potholes, garbage, etc.) in your photo.")
-                elif hf_api_available:
-                    st.info("✅ Backup image analysis available via HuggingFace BLIP.")
-                else:
-                    st.warning("⚠️ For best results, add MISTRAL_API_KEY to .env file for advanced vision analysis.")
+                # AI capability info
+                with st.expander("🤖 AI Image Analysis Capabilities", expanded=False):
+                    if mistral_client:
+                        st.success("✅ **Mistral Pixtral Vision** - Advanced AI image analysis enabled!")
+                        st.write("• Automatically identifies potholes, garbage, damaged infrastructure")
+                        st.write("• Detects safety hazards and civic issues")
+                        st.write("• Generates detailed descriptions")
+                    elif hf_api_available:
+                        st.info("✅ **HuggingFace BLIP** - Backup image analysis available")
+                    else:
+                        st.warning("⚠️ Add MISTRAL_API_KEY for advanced vision analysis")
                 
+                # Optional text description
+                st.markdown("---")
+                st.markdown("##### ✍️ Additional details (optional)")
                 image_description = st.text_area(
-                    "Additional description (optional)",
-                    height=100,
-                    placeholder="Example: This pothole has been here for 2 weeks and caused 3 accidents..."
+                    "Add more context to help AI understand better:",
+                    height=120,
+                    placeholder="Example: This pothole has been here for 2 weeks and caused 3 accidents. Located near the main market.",
+                    key="image_text_desc",
+                    help="Optional: Add location, duration, or other important details"
                 )
                 if image_description:
                     grievance_text = image_description
                     original_text = image_description
+                    st.success(f"✅ Additional text added ({len(image_description)} characters)")
 
         # ---- AUDIO ----
         with tab3:
-            st.markdown("#### 🎤 Submit Voice Complaint")
+            st.markdown("##### 🎤 Submit your complaint by voice")
             
+            # Tips section with better design
+            with st.expander("💡 Tips for best audio transcription results", expanded=False):
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.write("**📱 Supported Formats:**")
+                    st.write("• MP3, WAV, M4A")
+                    st.write("• OGG, WEBM, FLAC")
+                    st.write("• MP4, MPEG, MPGA")
+                    st.write("")
+                    st.write("**🎯 Best Practices:**")
+                    st.write("• Speak clearly and slowly")
+                    st.write("• Minimize background noise")
+                    st.write("• Keep under 25MB (~10 mins)")
+                with col2:
+                    st.write("**🌍 Languages Supported:**")
+                    st.write("• English, Hindi")
+                    st.write("• Regional Indian languages")
+                    st.write("")
+                    st.write("**⚡ Processing Speed:**")
+                    st.write("• Groq Whisper: 5-10 seconds")
+                    st.write("• Ultra-fast transcription")
+            
+            # API status
             if groq_api_key:
-                st.success("✅ Voice transcription enabled with Groq Whisper AI (Lightning Fast)!")
+                st.success("✅ Voice transcription enabled with **Groq Whisper AI** (Lightning Fast!)")
             else:
-                st.info("💡 Add FREE Groq API key to enable automatic transcription")
-                st.caption("Get it at: https://console.groq.com/keys")
+                st.warning("⚠️ Audio transcription unavailable - Add GROQ_API_KEY to enable")
+                st.caption("Get FREE API key at: https://console.groq.com/keys")
             
-            with st.expander("📱 Tips for best results"):
-                st.write("• **Supported formats:** MP3, WAV, M4A, OGG, WEBM, FLAC, MP4, MPEG, MPGA")
-                st.write("• **File size:** Keep under 25MB (about 10 minutes)")
-                st.write("• **Audio quality:** Clear speech, minimal background noise")
-                st.write("• **Languages:** English, Hindi, and other Indian languages")
-                st.write("• **Recording tip:** Speak clearly, describe the problem in detail")
-                st.write("• **Speed:** Groq Whisper is extremely fast (5-10 seconds for most files)")
+            # File uploader
+            col1, col2 = st.columns([1, 1])
             
-            audio_file = st.file_uploader(
-                "Upload voice complaint (MP3 / WAV / M4A / OGG)",
-                type=["mp3", "wav", "m4a", "ogg", "webm", "flac", "mp4", "mpeg", "mpga"],
-                help="Record your complaint and upload. Groq Whisper AI will transcribe it automatically.",
-                key="audio_uploader"
-            )
+            with col1:
+                audio_file = st.file_uploader(
+                    "Choose an audio file:",
+                    type=["mp3", "wav", "m4a", "ogg", "webm", "flac", "mp4", "mpeg", "mpga"],
+                    key="audio_uploader_main",
+                    help="Record your complaint and upload. AI will transcribe automatically."
+                )
+            
+            with col2:
+                if audio_file:
+                    st.success("✅ Audio uploaded successfully!")
+                    file_size_mb = audio_file.size / (1024 * 1024)
+                    st.caption(f"📎 {audio_file.name} ({file_size_mb:.2f} MB)")
             
             if audio_file:
-                # Show file info
-                file_size_mb = audio_file.size / (1024 * 1024)
-                st.caption(f"📎 {audio_file.name} ({file_size_mb:.2f} MB)")
-                
+                # Audio player
                 st.audio(audio_file, format=f'audio/{audio_file.type.split("/")[-1]}')
                 
-                st.info("💡 Click 'Submit Grievance' button below - audio will be automatically transcribed!")
+                st.info("💡 Click **'Submit Grievance'** button below - audio will be automatically transcribed!")
                 
-                # Optional manual description
-                st.markdown("#### ✍️ Additional description (optional)")
+                # Optional text description
+                st.markdown("---")
+                st.markdown("##### ✍️ Additional details (optional)")
                 manual_desc = st.text_area(
-                    "Add more details if needed:",
-                    height=100,
-                    placeholder="Example: This issue has been ongoing for 2 weeks...",
-                    key="audio_manual_desc"
+                    "Add written details to complement your voice complaint:",
+                    height=120,
+                    placeholder="Example: Location details, specific landmarks, how long this has been an issue...",
+                    key="audio_text_desc",
+                    help="Optional: Add extra context that might not be in the audio"
                 )
                 if manual_desc:
                     original_text = manual_desc
+                    st.success(f"✅ Additional text added ({len(manual_desc)} characters)")
 
     # ----------------------------
-    # Submit Button
+    # Submit Button with improved styling
     # ----------------------------
     st.markdown("<br>", unsafe_allow_html=True)
+    
+    # SMART PRIORITY DETECTION - Latest upload wins
+    # Priority: Audio > Image > Text (most recently uploaded takes precedence)
+    has_text_only = grievance_text.strip() != "" and not image_file and not audio_file
+    has_image_only = image_file is not None and not audio_file
+    has_audio_only = audio_file is not None
+    
+    # Determine what to show and process
+    if has_audio_only:
+        # Audio is present - only show audio status
+        if original_text:
+            st.info(f"🎤 **Audio + Additional Text ready**")
+        else:
+            st.info(f"🎤 **Audio ready for transcription**")
+        current_mode = "audio"
+    elif has_image_only:
+        # Image is present (no audio) - only show image status
+        if grievance_text:
+            st.info(f"📷 **Image + Additional Text ready**")
+        else:
+            st.info(f"📷 **Image ready for AI analysis**")
+        current_mode = "image"
+    elif has_text_only:
+        # Only text is present
+        st.info(f"📝 **Text complaint ready** ({len(grievance_text)} characters)")
+        current_mode = "text"
+    else:
+        current_mode = None
+    
     left, center, right = st.columns([3, 2, 3])
     with center:
-        submit = st.button("🚀 Submit Grievance", use_container_width=True, type="primary")
+        submit = st.button(
+            "🚀 Submit Grievance", 
+            use_container_width=True, 
+            type="primary",
+            help="Click to submit your complaint for AI analysis"
+        )
 
     # ----------------------------
     # AI Analysis Section
     # ----------------------------
     if submit:
-        if grievance_text.strip() == "" and image_file is None and audio_file is None:
-            st.error("⚠️ Please submit a grievance using text, photo, or audio.")
+        # Validate that at least one input is provided
+        if not has_text_only and not has_image and not has_audio:
+            st.error("⚠️ Please provide at least one input: text, photo, or audio.")
         else:
-            # Handle audio file first if uploaded
-            if audio_file is not None:
-                # If user added manual description in audio tab, combine it
-                manual_addition = original_text if original_text else ""
+            # Store what we're analyzing to prevent re-analysis
+            analyzing_text = grievance_text if has_text_only else ""
+            analyzing_image = image_file if has_image else None
+            analyzing_audio = audio_file if has_audio else None
+            analyzing_original = original_text
+            
+            # Progress tracking
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+            
+            # Process based on current input type
+            if analyzing_audio:
+                # AUDIO: Transcribe first
+                status_text.text("🎙️ Step 1/4: Transcribing audio...")
+                progress_bar.progress(25)
                 
                 with st.spinner("🎙️ Transcribing audio with Groq Whisper..."):
-                    transcription, success = transcribe_audio(audio_file)
+                    transcription, success = transcribe_audio(analyzing_audio)
                 
                 if success:
                     st.success("✅ Audio transcribed successfully!")
                     
-                    # Show transcribed text
                     with st.expander("👁️ View Transcribed Text"):
                         st.write(transcription)
                     
-                    # Combine manual description with transcription if exists
-                    if manual_addition:
-                        grievance_text = f"{transcription}\n\nAdditional details: {manual_addition}"
-                        original_text = grievance_text
+                    # Combine with additional text if provided
+                    if analyzing_original:
+                        analyzing_text = f"{transcription}\n\nAdditional details: {analyzing_original}"
                     else:
-                        grievance_text = transcription
-                        original_text = transcription
+                        analyzing_text = transcription
                     
-                    # Detect language if transcription succeeded
+                    # Language detection
                     if mistral_client and transcription.strip():
+                        status_text.text("🌍 Step 2/4: Detecting language...")
+                        progress_bar.progress(40)
+                        
                         with st.spinner("🌍 Detecting language..."):
                             translated_text, detected_language = detect_and_translate(transcription)
                         
@@ -947,123 +1057,210 @@ if page == "🏠 Submit Grievance":
                             st.info(f"🌐 Detected Language: **{detected_language}** → Translated to English")
                             with st.expander("📄 View Original Transcription"):
                                 st.write(transcription)
-                            if manual_addition:
-                                grievance_text = f"{translated_text}\n\nAdditional details: {manual_addition}"
+                            if analyzing_original:
+                                analyzing_text = f"{translated_text}\n\nAdditional details: {analyzing_original}"
                             else:
-                                grievance_text = translated_text
+                                analyzing_text = translated_text
+                    
+                    # Clear image to prevent analysis
+                    analyzing_image = None
                 else:
                     st.error(transcription)
-                    st.error("❌ Audio transcription failed. Please try uploading a different audio file or use text/photo instead.")
+                    st.error("❌ Audio transcription failed.")
+                    progress_bar.empty()
+                    status_text.empty()
                     st.stop()
             
-            # Language detection for text input (not audio)
-            elif grievance_text.strip() and not image_file:
+            elif analyzing_image:
+                # IMAGE: Keep image and optional text
+                status_text.text("🖼️ Step 1/4: Preparing image analysis...")
+                progress_bar.progress(25)
+                # analyzing_image already set
+                # analyzing_text already has optional text from image tab
+            
+            elif analyzing_text:
+                # TEXT ONLY: Language detection
+                status_text.text("🌍 Step 1/4: Detecting language...")
+                progress_bar.progress(25)
+                
                 with st.spinner("🌍 Detecting language..."):
-                    translated_text, detected_language = detect_and_translate(grievance_text)
+                    translated_text, detected_language = detect_and_translate(analyzing_text)
                 
                 if "English" not in detected_language:
-                    st.info(f"🌐 Detected Language: **{detected_language}** → Translated to English for processing")
+                    st.info(f"🌐 Detected Language: **{detected_language}** → Translated to English")
                     with st.expander("📄 View Original Text"):
-                        st.write(original_text)
-                    grievance_text = translated_text
+                        st.write(analyzing_original)
+                    analyzing_text = translated_text
             
-            # AI Analysis with progress
-            with st.spinner("🔍 Analyzing complaint content..."):
-                time.sleep(0.3)
-            with st.spinner("🧠 AI classifying issue category..."):
-                time.sleep(0.3)
-            with st.spinner("⚡ Calculating priority score..."):
-                time.sleep(0.3)
-            with st.spinner("🎯 Routing to department..."):
-                analysis = analyze_complaint_with_ai(grievance_text if grievance_text.strip() else "", image_file)
+            # AI Analysis
+            status_text.text("🔍 Step 2/4: Analyzing complaint content...")
+            progress_bar.progress(50)
+            time.sleep(0.3)
+            
+            status_text.text("🧠 Step 3/4: AI classifying and prioritizing...")
+            progress_bar.progress(75)
+            time.sleep(0.3)
+            
+            status_text.text("🎯 Step 4/4: Routing to department...")
+            progress_bar.progress(90)
+            
+            with st.spinner("🤖 AI is analyzing your complaint..."):
+                analysis = analyze_complaint_with_ai(
+                    analyzing_text if analyzing_text.strip() else "",
+                    analyzing_image
+                )
+            
+            progress_bar.progress(100)
+            status_text.text("✅ Analysis complete!")
+            time.sleep(0.5)
+            progress_bar.empty()
+            status_text.empty()
             
             # Validate analysis
             required_keys = ['category', 'department', 'priority_score', 'priority_level', 'summary', 'urgency_reasons']
             if not all(key in analysis for key in required_keys):
-                fallback_text = grievance_text if grievance_text.strip() else "Image uploaded"
+                fallback_text = analyzing_text if analyzing_text.strip() else "Image uploaded"
                 analysis = analyze_complaint_fallback(fallback_text)
             
             # Additional analysis
-            sentiment = analyze_sentiment(grievance_text if grievance_text else "")
-            impact_score = calculate_impact_score(grievance_text if grievance_text else "", analysis['category'])
+            sentiment = analyze_sentiment(analyzing_text if analyzing_text else "")
+            impact_score = calculate_impact_score(analyzing_text if analyzing_text else "", analysis['category'])
             resolution_days = get_estimated_resolution_time(analysis['category'], analysis['priority_score'])
             
-            st.success("✅ Grievance Submitted Successfully")
+            st.success("✅ Grievance Submitted Successfully!")
             
             # Check for similar complaints
-            if grievance_text.strip():
-                similar = find_similar_complaints(grievance_text, st.session_state.complaints)
+            if analyzing_text.strip():
+                similar = find_similar_complaints(analyzing_text, st.session_state.complaints)
                 if similar:
-                    with st.expander(f"⚠️ Found {len(similar)} similar complaint(s) - View Details"):
+                    with st.expander(f"⚠️ Found {len(similar)} similar complaint(s) - Click to view", expanded=False):
+                        st.warning("Similar complaints detected. This might be a recurring issue in your area.")
                         for s in similar:
                             st.markdown(f"**{s['id']}** - {s['category']} ({s['similarity']} match)")
-                            st.caption(f"Status: {s['status']} | {s['text']}...")
+                            st.caption(f"Status: {s['status']} | {s['text'][:100]}...")
                             st.divider()
 
-            st.markdown("## 🔍 AI Analysis & Routing")
+            st.markdown("## 🔍 AI Analysis & Routing Results")
 
             with st.container(border=True):
+                # Main metrics with better styling
                 c1, c2, c3, c4, c5 = st.columns(5)
 
-                c1.metric("📂 Category", analysis['category'])
-                c2.metric("⚠️ Priority", analysis['priority_level'])
-                c3.metric("🏢 Department", analysis['department'])
-                c4.metric("📊 Score", f"{analysis['priority_score']}/10")
+                with c1:
+                    st.metric(
+                        label="📂 Category",
+                        value=analysis['category'],
+                        help="AI-identified complaint category"
+                    )
                 
-                sentiment_emoji = {"Angry": "😡", "Frustrated": "😤", "Concerned": "😟", "Calm": "😐", "Neutral": "😐"}
-                c5.metric("😊 Sentiment", f"{sentiment} {sentiment_emoji.get(sentiment, '😐')}")
+                with c2:
+                    priority_color = "🔴" if analysis['priority_score'] >= 7 else "🟠" if analysis['priority_score'] >= 4 else "🟢"
+                    st.metric(
+                        label="⚠️ Priority",
+                        value=analysis['priority_level'],
+                        help=f"Urgency level: {priority_color}"
+                    )
+                
+                with c3:
+                    st.metric(
+                        label="🏢 Department",
+                        value=analysis['department'],
+                        help="Assigned government department"
+                    )
+                
+                with c4:
+                    st.metric(
+                        label="📊 Priority Score",
+                        value=f"{analysis['priority_score']}/10",
+                        help="AI-calculated urgency score"
+                    )
+                
+                with c5:
+                    sentiment_emoji = {"Angry": "😡", "Frustrated": "😤", "Concerned": "😟", "Calm": "😐", "Neutral": "😐"}
+                    st.metric(
+                        label="😊 Sentiment",
+                        value=f"{sentiment} {sentiment_emoji.get(sentiment, '😐')}",
+                        help="Detected citizen emotion"
+                    )
 
+                st.markdown("---")
+                
                 st.markdown("### 📄 Complaint Summary")
-                st.write(analysis['summary'])
+                st.info(analysis['summary'])
 
                 col_left, col_right = st.columns(2)
                 
                 with col_left:
                     st.markdown("### ⚡ Urgency Analysis")
-                    for reason in analysis['urgency_reasons']:
-                        st.write(f"• {reason}")
+                    for i, reason in enumerate(analysis['urgency_reasons'], 1):
+                        st.write(f"**{i}.** {reason}")
                 
                 with col_right:
-                    st.markdown("### 📊 Impact & Resolution")
+                    st.markdown("### 📊 Impact & Timeline")
                     impact_labels = {1: "Individual", 2: "Local Area", 3: "Community-wide"}
-                    st.write(f"• **Impact Level:** {impact_labels[impact_score]} (Score: {impact_score}/3)")
-                    st.write(f"• **Estimated Resolution:** {resolution_days} days")
-                    st.write(f"• **Language:** {detected_language}")
+                    impact_icons = {1: "👤", 2: "🏘️", 3: "🌆"}
+                    
+                    st.write(f"{impact_icons[impact_score]} **Impact Level:** {impact_labels[impact_score]} (Score: {impact_score}/3)")
+                    st.write(f"⏱️ **Estimated Resolution:** {resolution_days} days")
+                    st.write(f"🌍 **Language:** {detected_language}")
+                
+                st.markdown("---")
 
                 st.markdown("### 📋 What Happens Next?")
-                steps = [
-                    f"1️⃣ Complaint routed to **{analysis['department']}**",
-                    f"2️⃣ Priority: **{analysis['priority_level']}** (Score: {analysis['priority_score']}/10)",
-                    f"3️⃣ Estimated resolution: **{resolution_days} days**",
-                    "4️⃣ Updates via SMS/Email (if registered)",
-                    "5️⃣ Track using Complaint ID below"
-                ]
                 
-                for step in steps:
-                    st.write(step)
+                steps_col1, steps_col2 = st.columns(2)
+                
+                with steps_col1:
+                    st.write(f"**1️⃣ Routing**")
+                    st.caption(f"→ Complaint sent to **{analysis['department']}**")
+                    
+                    st.write(f"**2️⃣ Priority Assignment**")
+                    st.caption(f"→ **{analysis['priority_level']}** (Score: {analysis['priority_score']}/10)")
+                    
+                    st.write(f"**3️⃣ Timeline**")
+                    st.caption(f"→ Expected resolution in **{resolution_days} days**")
+                
+                with steps_col2:
+                    st.write(f"**4️⃣ Notifications**")
+                    st.caption("→ Updates via SMS/Email (if registered)")
+                    
+                    st.write(f"**5️⃣ Tracking**")
+                    st.caption("→ Use Complaint ID below to track status")
+                    
+                    st.write(f"**6️⃣ Resolution**")
+                    st.caption("→ Department will address the issue")
 
-                st.markdown("### 🕒 System Status")
+                st.markdown("---")
+
+                st.markdown("### 🆔 Complaint Information")
                 complaint_id = f"CIV-{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}"
                 submitted_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 
-                status_info = {
-                    "Complaint ID": complaint_id,
-                    "Status": "Open",
-                    "Submitted At": submitted_at,
-                    "AI Confidence": "High" if mistral_client else "Fallback Mode",
-                    "Processing Time": "< 5 seconds"
-                }
+                info_col1, info_col2 = st.columns(2)
                 
-                st.code(complaint_id, language=None)
-                st.json(status_info)
+                with info_col1:
+                    st.markdown("**Complaint ID:**")
+                    st.code(complaint_id, language=None)
+                    st.caption("📋 Save this ID to track your complaint")
+                
+                with info_col2:
+                    status_info = {
+                        "Status": "Open",
+                        "Submitted": submitted_at,
+                        "AI Confidence": "High" if mistral_client else "Fallback",
+                        "Processing Time": "< 15 seconds"
+                    }
+                    
+                    for key, value in status_info.items():
+                        st.write(f"**{key}:** {value}")
                 
                 # Mock notification
-                st.toast(f"📧 Confirmation sent to registered email/SMS", icon="✅")
+                st.toast("📧 Confirmation sent to registered contact", icon="✅")
 
             # Store complaint
             complaint_record = {
                 "id": complaint_id,
-                "text": original_text if original_text else grievance_text,
+                "text": analyzing_original if analyzing_original else analyzing_text,
                 "category": analysis['category'],
                 "department": analysis['department'],
                 "priority_score": analysis['priority_score'],
@@ -1079,6 +1276,9 @@ if page == "🏠 Submit Grievance":
             
             st.session_state.complaints.append(complaint_record)
             save_complaint_to_csv(complaint_record)
+            
+            # Force page refresh to clear file uploaders after successful submission
+            st.rerun()
 
 # ----------------------------
 # PAGE: Admin Dashboard
@@ -1261,5 +1461,16 @@ elif page == "📊 Admin Dashboard":
 # Footer
 # ----------------------------
 st.divider()
-st.caption("🏆 CivicFix AI - Hackathon Prototype | AI for Good Governance | Built with Streamlit + Mistral AI + Groq")
-st.caption("💡 Features: Multi-modal Input | Multi-lingual Support | Smart Prioritization | Auto-routing | Real-time Analytics")
+st.markdown("""
+    <div style='text-align: center; padding: 1rem 0;'>
+        <p style='font-size: 0.95rem; font-weight: 600; color: #374151; margin-bottom: 0.3rem;'>
+            🏆 CivicFix AI - Hackathon Prototype
+        </p>
+        <p style='font-size: 0.85rem; color: #6b7280;'>
+            Built for Byte Quest 2025 | Team Deep AI
+        </p>
+        <p style='font-size: 0.8rem; color: #9ca3af;'>
+            Powered by Mistral AI • Groq Whisper • HuggingFace • Streamlit
+        </p>
+    </div>
+""", unsafe_allow_html=True)
